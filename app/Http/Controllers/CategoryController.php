@@ -38,7 +38,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'name' => 'required|unique:categories',
+            'name' => 'required|unique:categories,name',
         ]);
 
         $data = new Category();
@@ -67,7 +67,11 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        if($category){
+            return response()->json($category,200);
+        }else{
+            return response()->json('failed',404);
+        }
     }
 
     /**
@@ -79,7 +83,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|unique:categories,name,'.$category->id,
+        ]);
+        $category->name = $request->name;
+        $category->slug = Str::slug($request->name);
+        $category->save();
+        return response()->json('Success',200);
+
     }
 
     /**

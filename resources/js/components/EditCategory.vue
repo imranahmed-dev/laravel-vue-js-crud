@@ -18,7 +18,7 @@
             <div class="row">
               <div class="col-2"></div>
               <div class="col-8">
-                <form @submit.prevent="createCategory">
+                <form @submit.prevent="updateCategory">
                   <div class="form-group">
                     <label for="">Category Name</label>
                     <input
@@ -58,16 +58,24 @@ export default {
     };
   },
   methods: {
-    createCategory() {
-      this.form.post("/api/category").then(({ data }) => {
-
-        this.form.name = '';
+    updateCategory() {
+        let id = this.$route.params.id;
+      this.form.put(`/api/category/${id}`).then(({}) => {
         this.$toast.success({
           title: "Success",
-          message: "Category Created Successfully",
+          message: "Category Updated Successfully",
         });
       });
     },
+    loadCategory() {
+          let id = this.$route.params.id;
+         axios.get(`/api/category/${id}/edit`).then((response) => {
+          this.form.name = response.data.name;
+      });
+    },
+  },
+  mounted(){
+      this.loadCategory();
   },
 };
 </script>

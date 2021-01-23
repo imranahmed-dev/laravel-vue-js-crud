@@ -30,7 +30,7 @@
                   <td>{{category.name}}</td>
                   <td>{{category.slug}}</td>
                   <td>
-                    <router-link :to="{name: 'edit-category', params: {slug:category.slug}}" class="btn btn-info btn-sm">Edit</router-link>
+                    <router-link :to="{name: 'edit-category', params: {id:category.id}}" class="btn btn-info btn-sm">Edit</router-link>
                     <a href="#" class="btn btn-danger btn-sm">Delete</a>
                   </td>
                 </tr>

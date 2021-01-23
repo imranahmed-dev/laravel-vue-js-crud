@@ -2073,6 +2073,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vform */ "./node_modules/vform/dist/vform.common.js");
 /* harmony import */ var vform__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vform__WEBPACK_IMPORTED_MODULE_0__);
+function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
+
 //
 //
 //
@@ -2131,19 +2133,30 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    createCategory: function createCategory() {
+    updateCategory: function updateCategory() {
       var _this = this;
 
-      this.form.post("/api/category").then(function (_ref) {
-        var data = _ref.data;
-        _this.form.name = '';
+      var id = this.$route.params.id;
+      this.form.put("/api/category/".concat(id)).then(function (_ref) {
+        _objectDestructuringEmpty(_ref);
 
         _this.$toast.success({
           title: "Success",
-          message: "Category Created Successfully"
+          message: "Category Updated Successfully"
         });
       });
+    },
+    loadCategory: function loadCategory() {
+      var _this2 = this;
+
+      var id = this.$route.params.id;
+      axios.get("/api/category/".concat(id, "/edit")).then(function (response) {
+        _this2.form.name = response.data.name;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.loadCategory();
   }
 });
 
@@ -39542,7 +39555,7 @@ var render = function() {
                             attrs: {
                               to: {
                                 name: "edit-category",
-                                params: { slug: category.slug }
+                                params: { id: category.id }
                               }
                             }
                           },
@@ -39771,7 +39784,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.createCategory($event)
+                        return _vm.updateCategory($event)
                       }
                     }
                   },
@@ -55709,7 +55722,7 @@ var routes = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     component: _components_CreateCategory_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     name: 'create-category'
   }, {
-    path: '/category/edit/:slug',
+    path: '/category/edit/:id',
     component: _components_EditCategory_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     name: 'edit-category'
   }]
