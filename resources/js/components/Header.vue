@@ -12,7 +12,7 @@
                         <router-link class="nav-link" :to="{name: 'category'}">Category</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Product</a>
+                        <router-link class="nav-link" :to="{name: 'product'}">Product</router-link>
                     </li>
                 </ul>
             </div>

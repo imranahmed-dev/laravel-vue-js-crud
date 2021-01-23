@@ -5,11 +5,11 @@
         <div class="card">
           <div class="card-header">
             <h5 class="m-0">
-              Category
+              Product
               <router-link
-                :to="{ name: 'create-category' }"
+                :to="{ name: 'create-product' }"
                 class="btn btn-primary btn-sm float-right"
-                >Create Category</router-link
+                >Create Product</router-link
               >
             </h5>
           </div>
@@ -19,26 +19,30 @@
               <thead>
                 <tr>
                   <th>SL</th>
-                  <th>Category Name</th>
-                  <th>Category Slug</th>
+                  <th>Product Title</th>
+                  <th>Product Slug</th>
+                  <th>Product Image</th>
+                  <th>Product Description</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="category in categories" :key="category.id">
-                  <td>{{ category.id }}</td>
-                  <td>{{ category.name }}</td>
-                  <td>{{ category.slug }}</td>
+                <tr v-for="product in products" :key="product.id">
+                  <td>{{ product.id }}</td>
+                  <td>{{ product.title }}</td>
+                  <td>{{ product.slug }}</td>
+                  <td>{{ product.image }}</td>
+                  <td>{{ product.description }}</td>
                   <td>
                     <router-link
                       :to="{
-                        name: 'edit-category',
-                        params: { id: category.id },
+                        name: 'edit-product',
+                        params: { id: product.id },
                       }"
                       class="btn btn-info btn-sm"
                       >Edit</router-link
                     >
-                    <a @click.prevent="deleteCategory(category)" href="" class="btn btn-danger btn-sm">Delete</a>
+                    <a @click.prevent="deleteProduct(product)" href="" class="btn btn-danger btn-sm">Delete</a>
                   </td>
                 </tr>
               </tbody>
@@ -54,21 +58,21 @@
 export default {
   data() {
     return {
-      categories: [],
+      products: [],
     };
   },
   methods: {
-    loadCategories() {
-      axios.get("/api/category").then((response) => {
-        this.categories = response.data;
+    loadProducts() {
+      axios.get("/api/product").then((response) => {
+        this.products = response.data;
       });
     },
-    deleteCategory(category) {
-      axios.delete(`/api/category/${category.id}`).then(() => {
-        this.loadCategories();
+    deleteProduct(category) {
+      axios.delete(`/api/category/${product.id}`).then(() => {
+        this.loadProducts();
         this.$toast.success({
           title: "Success",
-          message: "Category Deleted Successfully",
+          message: "Product Deleted Successfully",
         });
         
       });
@@ -77,7 +81,7 @@ export default {
     },
   },
   mounted() {
-    this.loadCategories();
+    this.loadProducts();
   },
 };
 </script>
