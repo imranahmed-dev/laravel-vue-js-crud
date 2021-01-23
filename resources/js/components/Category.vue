@@ -26,12 +26,19 @@
               </thead>
               <tbody>
                 <tr v-for="category in categories" :key="category.id">
-                  <td>{{category.id}}</td>
-                  <td>{{category.name}}</td>
-                  <td>{{category.slug}}</td>
+                  <td>{{ category.id }}</td>
+                  <td>{{ category.name }}</td>
+                  <td>{{ category.slug }}</td>
                   <td>
-                    <router-link :to="{name: 'edit-category', params: {id:category.id}}" class="btn btn-info btn-sm">Edit</router-link>
-                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                    <router-link
+                      :to="{
+                        name: 'edit-category',
+                        params: { id: category.id },
+                      }"
+                      class="btn btn-info btn-sm"
+                      >Edit</router-link
+                    >
+                    <a @click.prevent="deleteCategory(category)" href="" class="btn btn-danger btn-sm">Delete</a>
                   </td>
                 </tr>
               </tbody>
@@ -53,13 +60,25 @@ export default {
   methods: {
     loadCategories() {
       axios.get("/api/category").then((response) => {
-          this.categories = response.data;
+        this.categories = response.data;
       });
     },
+    deleteCategory(category) {
+      axios.delete(`/api/category/${category.id}`).then(() => {
+        this.loadCategories();
+        this.$toast.success({
+          title: "Success",
+          message: "Category Deleted Successfully",
+        });
+        
+      });
+      // let index = this.categories.indexOf(category);
+      // this.categories.splice(index,1);
+    },
   },
-  mounted(){
-      this.loadCategories();
-  }
+  mounted() {
+    this.loadCategories();
+  },
 };
 </script>
 <style scoped>

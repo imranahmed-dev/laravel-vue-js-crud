@@ -1953,6 +1953,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1966,6 +1973,19 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/category").then(function (response) {
         _this.categories = response.data;
       });
+    },
+    deleteCategory: function deleteCategory(category) {
+      var _this2 = this;
+
+      axios["delete"]("/api/category/".concat(category.id)).then(function () {
+        _this2.loadCategories();
+
+        _this2.$toast.success({
+          title: "Success",
+          message: "Category Deleted Successfully"
+        });
+      }); // let index = this.categories.indexOf(category);
+      // this.categories.splice(index,1);
     }
   },
   mounted: function mounted() {
@@ -2171,6 +2191,7 @@ function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -39566,7 +39587,13 @@ var render = function() {
                           "a",
                           {
                             staticClass: "btn btn-danger btn-sm",
-                            attrs: { href: "#" }
+                            attrs: { href: "" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.deleteCategory(category)
+                              }
+                            }
                           },
                           [_vm._v("Delete")]
                         )
