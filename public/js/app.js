@@ -2458,6 +2458,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2472,10 +2475,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    createProduct: function createProduct() {
+    updateProduct: function updateProduct() {
       var _this = this;
 
-      this.form.post("/api/product", {
+      var id = this.$route.params.id;
+      this.form.put("/api/product/".concat(id), {
         transformRequest: [function (data, headers) {
           return Object(object_to_formdata__WEBPACK_IMPORTED_MODULE_1__["objectToFormData"])(data);
         }],
@@ -2483,17 +2487,31 @@ __webpack_require__.r(__webpack_exports__);
           // Do whatever you want with the progress event
           console.log(e);
         }
-      }).then(function (response) {
-        _this.form.title = "", _this.form.price = "", _this.form.image = "", _this.form.description = "", _this.$toast.success({
+      }).then(function () {
+        _this.$toast.success({
           title: "Success",
-          message: "Product Uploaded Successfully"
+          message: "Product Updated Successfully"
         });
       });
     },
     onImageChange: function onImageChange(e) {
       var file = e.target.files[0];
       this.form.image = file;
+    },
+    loadProduct: function loadProduct() {
+      var _this2 = this;
+
+      var id = this.$route.params.id;
+      axios.get("/api/product/".concat(id, "/edit")).then(function (response) {
+        _this2.form.title = response.data.title;
+        _this2.form.price = response.data.price;
+        _this2.form.image = response.data.image;
+        _this2.form.description = response.data.description;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.loadProduct();
   }
 });
 
@@ -40555,7 +40573,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-success btn-sm", attrs: { type: "submit" } },
-        [_vm._v("\n                    Create\n                  ")]
+        [_vm._v("\n                    Update\n                  ")]
       )
     ])
   }
@@ -40590,7 +40608,7 @@ var render = function() {
               "h5",
               { staticClass: "m-0" },
               [
-                _vm._v("\n            Create Product\n            "),
+                _vm._v("\n            Edit Product\n            "),
                 _c(
                   "router-link",
                   {
@@ -40615,7 +40633,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.createProduct($event)
+                        return _vm.updateProduct($event)
                       }
                     }
                   },
@@ -40726,6 +40744,16 @@ var render = function() {
                       1
                     ),
                     _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("img", {
+                        attrs: {
+                          width: "100",
+                          src: _vm.form.image,
+                          alt: "image"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
                     _c(
                       "div",
                       { staticClass: "form-group" },
@@ -40793,7 +40821,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-success btn-sm", attrs: { type: "submit" } },
-        [_vm._v("\n                    Create\n                  ")]
+        [_vm._v("\n                    Update\n                  ")]
       )
     ])
   }

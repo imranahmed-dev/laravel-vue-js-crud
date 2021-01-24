@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header">
             <h5 class="m-0">
-              Create Product
+              Edit Product
               <router-link
                 :to="{ name: 'product' }"
                 class="btn btn-primary btn-sm float-right"
@@ -18,7 +18,7 @@
             <div class="row">
               <div class="col-2"></div>
               <div class="col-8">
-                <form @submit.prevent="createProduct">
+                <form @submit.prevent="updateProduct">
                   <div class="form-group">
                     <label for="">Product Title</label>
                     <input
@@ -55,6 +55,9 @@
                     <has-error :form="form" field="image"></has-error>
                   </div>
                   <div class="form-group">
+                    <img width="100" :src="form.image" alt="image" />
+                  </div>
+                  <div class="form-group">
                     <label for="">Product Description</label>
                     <textarea
                       class="form-control"
@@ -67,7 +70,7 @@
                   </div>
                   <div class="form-group">
                     <button class="btn btn-success btn-sm" type="submit">
-                      Create
+                      Update
                     </button>
                   </div>
                 </form>
@@ -96,8 +99,12 @@ export default {
     };
   },
   methods: {
-    createProduct() {
-      this.form.post("/api/product", {transformRequest:[function (data, headers) {
+    updateProduct() {
+      let id = this.$route.params.id;
+      this.form
+        .put(`/api/product/${id}`, {
+          transformRequest: [
+            function (data, headers) {
               return objectToFormData(data);
             },
           ],
@@ -105,23 +112,31 @@ export default {
             // Do whatever you want with the progress event
             console.log(e);
           },
-        }).then((response) => {
-
-          this.form.title = "",
-          this.form.price = "",
-          this.form.image = "",
-          this.form.description = "",
-
+        })
+        .then(() => {
           this.$toast.success({
-          title: "Success",
-          message: "Product Uploaded Successfully",
-        });
+            title: "Success",
+            message: "Product Updated Successfully",
+          });
         });
     },
     onImageChange(e) {
       const file = e.target.files[0];
       this.form.image = file;
     },
+    loadProduct() {
+      let id = this.$route.params.id;
+      axios.get(`/api/product/${id}/edit`).then((response) => {
+        this.form.title = response.data.title;
+        this.form.price = response.data.price;
+        this.form.image = response.data.image;
+        this.form.description = response.data.description;
+        
+      });
+    },
+  },
+  mounted() {
+    this.loadProduct();
   },
 };
 </script>

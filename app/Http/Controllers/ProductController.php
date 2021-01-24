@@ -79,7 +79,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        if($product){
+            return response()->json($product,200);
+        }else{
+            return response()->json('failed',404);
+        }
     }
 
     /**
@@ -91,7 +95,30 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+
+        $this->validate($request, [
+            'title' => 'required|unique:products,title|max:255,'.$product->id,
+            'price' => 'required|integer',
+            'description' => 'required',
+            'image' => 'mimes:jpg,jpeg,png',
+
+        ]);
+        
+        $product->title = $request->title;
+        $product->slug = Str::slug($request->title);
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $image = $request->file('image');
+        if ($image){
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploaded/product'), $imageName);
+            $product->image = '/uploaded/product/' . $imageName;
+            $image_path = $product->image;
+            @unlink($image_path);
+
+        }
+        $product->save();
+        return response()->json('Success', 200);
     }
 
     /**
@@ -104,7 +131,7 @@ class ProductController extends Controller
     {
         $data = Product::find($id);
         $image_path = $data->image;
-        unlink(public_path($image_path));
+        @unlink(public_path($image_path));
         $data->delete();
         return response()->json('Success',200);
     }

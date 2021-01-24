@@ -9,7 +9,6 @@ import Home from '../components/Home.vue';
 import Category from '../components/Category.vue';
 import CreateCategory from '../components/CreateCategory.vue';
 import EditCategory from '../components/EditCategory.vue';
-
 import Product from '../components/Product.vue';
 import CreateProduct from '../components/CreateProduct.vue';
 import EditProduct from '../components/EditProduct.vue';

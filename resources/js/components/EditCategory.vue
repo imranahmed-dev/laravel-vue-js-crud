@@ -33,7 +33,7 @@
                   </div>
                   <div class="form-group">
                     <button class="btn btn-success btn-sm" type="submit">
-                      Create
+                      Update
                     </button>
                   </div>
                 </form>
