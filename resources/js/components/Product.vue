@@ -20,6 +20,7 @@
                 <tr>
                   <th>SL</th>
                   <th>Product Title</th>
+                  <th>Product Price</th>
                   <th>Product Slug</th>
                   <th>Product Image</th>
                   <th>Product Description</th>
@@ -30,8 +31,9 @@
                 <tr v-for="product in products" :key="product.id">
                   <td>{{ product.id }}</td>
                   <td>{{ product.title }}</td>
+                  <td>{{ product.price }}</td>
                   <td>{{ product.slug }}</td>
-                  <td>{{ product.image }}</td>
+                  <td><img width="50" :src="product.image" alt="image"></td>
                   <td>{{ product.description }}</td>
                   <td>
                     <router-link
@@ -67,8 +69,8 @@ export default {
         this.products = response.data;
       });
     },
-    deleteProduct(category) {
-      axios.delete(`/api/category/${product.id}`).then(() => {
+    deleteProduct(product) {
+      axios.delete(`/api/product/${product.id}`).then(() => {
         this.loadProducts();
         this.$toast.success({
           title: "Success",

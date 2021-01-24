@@ -2,7 +2,7 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <router-link class="navbar-brand" :to="{name: 'home'}">Navbar</router-link>
+            <router-link class="navbar-brand" :to="{name: 'home'}">Laravel Vue Js Crud</router-link>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -24,5 +24,6 @@
     export default {};
 
 </script>
-<style scoped>
+<style>
+
 </style>

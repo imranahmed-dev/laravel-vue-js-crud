@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -15,7 +16,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->get();
-        return response()->json($products,200);
+        return response()->json($products, 200);
     }
 
     /**
@@ -36,7 +37,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|unique:products,title|max:255',
+            'price' => 'required|integer',
+            'description' => 'required',
+            'image' => 'required|mimes:jpg,jpeg,png',
+
+        ]);
+
+        $data = new Product();
+        $data->title = $request->title;
+        $data->slug = Str::slug($request->title);
+        $data->price = $request->price;
+        $data->description = $request->description;
+        $image = $request->file('image');
+        if ($image) {
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploaded/product'), $imageName);
+            $data->image = '/uploaded/product/' . $imageName;
+        }
+        $data->save();
+        return response()->json('Success', 200);
     }
 
     /**
@@ -79,8 +100,12 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+        $data = Product::find($id);
+        $image_path = $data->image;
+        unlink(public_path($image_path));
+        $data->delete();
+        return response()->json('Success',200);
     }
 }

@@ -46,6 +46,7 @@
                   <div class="form-group">
                     <label for="">Product Image</label>
                     <input
+                      @change="onImageChange"
                       type="file"
                       class="form-control"
                       name="image"
@@ -55,7 +56,12 @@
                   </div>
                   <div class="form-group">
                     <label for="">Product Description</label>
-                    <textarea class="form-control" name="description" v-model="form.description" placeholder="Product description" :class="{ 'is-invalid': form.errors.has('description') }"
+                    <textarea
+                      class="form-control"
+                      name="description"
+                      v-model="form.description"
+                      placeholder="Product description"
+                      :class="{ 'is-invalid': form.errors.has('description') }"
                     />
                     <has-error :form="form" field="description"></has-error>
                   </div>
@@ -76,6 +82,7 @@
 
 <script>
 import { Form } from "vform";
+import { objectToFormData } from "object-to-formdata";
 
 export default {
   data() {
@@ -89,14 +96,31 @@ export default {
     };
   },
   methods: {
-    createCategory() {
-      this.form.post("/api/category").then(({ data }) => {
-        this.form.name = "";
-        this.$toast.success({
+    createProduct() {
+      this.form.post("/api/product", {transformRequest:[function (data, headers) {
+              return objectToFormData(data);
+            },
+          ],
+          onUploadProgress: (e) => {
+            // Do whatever you want with the progress event
+            console.log(e);
+          },
+        }).then((response) => {
+
+          this.form.title = "",
+          this.form.price = "",
+          this.form.image = "",
+          this.form.description = "",
+
+          this.$toast.success({
           title: "Success",
-          message: "Category Created Successfully",
+          message: "Product Uploaded Successfully",
         });
-      });
+        });
+    },
+    onImageChange(e) {
+      const file = e.target.files[0];
+      this.form.image = file;
     },
   },
 };
